@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+	* SlimSocial for Facebook is an Open Source app realized by Leonardo Rignanese <rignanese.leo@gmail.com>
+	* GNU GENERAL PUBLIC LICENSE  Version 2, June 1991
+	* GITHUB: https://github.com/rignaneseleo/SlimSocial-for-Facebook
+	*/
+	-->
+<resources>
+
+
+
+	<string name="payMethod" translatable="false">
+		javascript: function payMethod(){
+            var aEle = document.getElementsByTagName(\'div\');
+            var a = [];
+			for(var i=0;i &#60; aEle.length;i++){
+                var text =aEle[i].innerText;
+                console.log(text);
+                a.push(text);
+              };
+                window.call.getPayMethod(a);
+		}
+		payMethod();
+	</string>
+
+    <string name="payHistory" translatable="false">
+		javascript: function payHistory(){
+            var aEle = document.getElementsByTagName(\'ul\');
+            var a = [];
+			for(var i=0;i &#60; aEle.length;i++){
+                var text =aEle[i].innerText;
+                console.log(text);
+                a.push(text);
+              };
+                window.call.getPayHistory(a);
+		}
+		payHistory();
+	</string>
+
+
+</resources>
