@@ -35,7 +35,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                         }
                     }
                     activityBinding.loginBtn.setOnClickListener {
-                        startActivity(Intent(this, WebActivity::class.java))
+                        startActivity(Intent(this, HomeActivity::class.java))
                     }
                 } else {
                     finish()

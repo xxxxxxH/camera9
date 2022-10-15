@@ -84,6 +84,7 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
             insertAd.showAd()
             return true
         }
+        insertAd = AdImpl(this).getInsertImpl()
         return false
     }
 
