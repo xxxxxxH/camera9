@@ -68,4 +68,6 @@ dependencies {
     api 'com.facebook.android:facebook-android-sdk:12.3.0'
     api 'com.tencent:mmkv:1.2.14'
     api 'org.greenrobot:eventbus:3.3.1'
+    api 'com.lcw.library:StickeView:1.0.1'
+    api 'com.github.wufengfeilong:KtBaseAdapter:2.1.5'
 }

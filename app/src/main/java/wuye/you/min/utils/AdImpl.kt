@@ -17,8 +17,10 @@ import com.applovin.mediation.nativeAds.MaxNativeAdLoader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.EventBus
 import wuye.you.min.base.BaseAd
 import wuye.you.min.base.MyApp
+import wuye.you.min.event.xEvent
 
 @SuppressLint("StaticFieldLeak")
 class AdImpl(private var activity: AppCompatActivity) : BaseAd(), ATSplashAdListener,
@@ -92,6 +94,7 @@ class AdImpl(private var activity: AppCompatActivity) : BaseAd(), ATSplashAdList
 
     override fun onAdDismiss(p0: ATAdInfo?, p1: IATSplashEyeAd?) {
         "open dismiss".print()
+        EventBus.getDefault().post(xEvent("open dismiss"))
         activity.lifecycleScope.launch(Dispatchers.IO) {
             delay(3500)
             splashAd.onDestory()
@@ -110,6 +113,7 @@ class AdImpl(private var activity: AppCompatActivity) : BaseAd(), ATSplashAdList
 
     override fun onAdHidden(ad: MaxAd?) {
         "insert hidden".print()
+        EventBus.getDefault().post(xEvent("insert hidden"))
         activity.lifecycleScope.launch(Dispatchers.IO) {
             insertAd.destroy()
             delay(3500)

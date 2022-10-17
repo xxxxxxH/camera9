@@ -2,7 +2,9 @@ package wuye.you.min.utils
 
 import android.app.ActivityManager
 import android.content.Context
+import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Environment
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.facebook.FacebookSdk
@@ -11,6 +13,10 @@ import com.facebook.applinks.AppLinkData
 import com.google.gson.Gson
 import wuye.you.min.http.HttpTools
 import wuye.you.min.http.OnNetworkRequest
+import java.io.BufferedOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import kotlin.random.Random
 
 fun Any?.print() {
@@ -85,4 +91,20 @@ fun AppCompatActivity.isInBackground(): Boolean {
 fun isShowOddsAd(): Boolean {
     val p:String = config["lr"].toString()
     return Random.nextInt(1, 101) <= p.toInt()
+}
+
+fun saveFile(bitmap: Bitmap): File {
+    val file = File("${Environment.getExternalStorageDirectory().absolutePath}/image.jpg")
+    if (file.exists()) {
+        file.delete()
+    }
+    try {
+        val bos = BufferedOutputStream(FileOutputStream(file))
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos)
+        bos.flush()
+        bos.close()
+    } catch (e: IOException) {
+        e.printStackTrace()
+    }
+    return file
 }

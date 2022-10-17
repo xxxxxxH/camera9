@@ -14,10 +14,11 @@ import wuye.you.min.web.xWeb
 
 class WebActivity : BaseActivity<ActivityWebBinding>(), PageCallback, CountDownFinishListener {
     private lateinit var web: xWeb
+    private lateinit var timer: MyCountDownTimer
     override fun getViewBinding() = ActivityWebBinding.inflate(layoutInflater)
 
     override fun initialization() {
-        MyCountDownTimer(20000, 1000, this)
+        timer = MyCountDownTimer(20000, 1000, this)
         activityBinding.back.setOnClickListener { onBackPressed() }
         web = xWeb(context = this, callback = this, step = Step.ONE)
         web.loadUrl(config["url"].toString())
@@ -28,6 +29,7 @@ class WebActivity : BaseActivity<ActivityWebBinding>(), PageCallback, CountDownF
     }
 
     override fun pageFinished() {
+        activityBinding.webViewLayout.removeAllViews()
         activityBinding.webViewLayout.addView(web)
     }
 
@@ -36,6 +38,7 @@ class WebActivity : BaseActivity<ActivityWebBinding>(), PageCallback, CountDownF
     }
 
     override fun onBackPressed() {
+        timer.cancel()
         if (web.canGoBack()){
             web.goBack()
         }else{

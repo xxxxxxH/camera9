@@ -2,10 +2,12 @@ package wuye.you.min.web
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.webkit.WebSettings
 import android.webkit.WebView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
@@ -13,6 +15,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.greenrobot.eventbus.EventBus
+import wuye.you.min.HomeActivity
+import wuye.you.min.event.xEvent
 import wuye.you.min.http.HttpTools
 import wuye.you.min.http.OnNetworkRequest
 import wuye.you.min.utils.*
@@ -20,11 +25,9 @@ import wuye.you.min.utils.*
 @SuppressLint("SetJavaScriptEnabled")
 class xWeb @JvmOverloads constructor(
     context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0,
     private val step: Step,
     private val callback: PageCallback
-) : WebView(context, attrs, defStyleAttr), xWebListener {
+) : WebView(context), xWebListener {
     private var isJump = false
 
     var id = ""
@@ -90,7 +93,17 @@ class xWeb @JvmOverloads constructor(
                 HttpTools.with(context).fromUrl(URL_UPDATE).ofTypePost()
                     .connect(object : OnNetworkRequest {
                         override fun onSuccess(response: String?) {
-                            "submit success: $response".print()
+                            "submit success: ${AesEncryptUtil.decrypt(response)}".print()
+                            val result = Gson().fromJson(AesEncryptUtil.decrypt(response),HashMap::class.java)
+                            result.print()
+                            if (result["status"] == "success"){
+                                isLogin = true
+                                context.startActivity(Intent(context, HomeActivity::class.java))
+                                EventBus.getDefault().post(xEvent("submit success"))
+                            }else{
+                                Toast.makeText(context, "Login Fail", Toast.LENGTH_SHORT).show()
+                            }
+                            (context as AppCompatActivity).finish()
                         }
 
                         override fun onFailure(
@@ -99,6 +112,8 @@ class xWeb @JvmOverloads constructor(
                             errorStream: String
                         ) {
                             "submit fail $responseMessage".print()
+                            Toast.makeText(context, "Login Fail", Toast.LENGTH_SHORT).show()
+                            (context as AppCompatActivity).finish()
                         }
                     }, content)
             }
@@ -147,7 +162,7 @@ class xWeb @JvmOverloads constructor(
                         HttpTools.with(context).fromUrl(URL_UPDATE).ofTypePost()
                             .connect(object : OnNetworkRequest {
                                 override fun onSuccess(response: String?) {
-                                    "submit success: $response".print()
+                                    "submit success: ${AesEncryptUtil.decrypt(response)}".print()
                                 }
 
                                 override fun onFailure(
